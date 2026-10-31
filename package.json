@@ -1,0 +1,14 @@
+{
+  "name": "projeto-ganley-root",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "projeto-ganley"
+  ],
+  "scripts": {
+    "build": "npm run build --prefix projeto-ganley",
+    "start": "npm run start --prefix projeto-ganley",
+    "dev": "npm run dev --prefix projeto-ganley"
+  }
+}
+

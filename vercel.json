@@ -1,0 +1,6 @@
+{
+  "buildCommand": "npm run build --prefix projeto-ganley",
+  "outputDirectory": "projeto-ganley/.next",
+  "framework": "nextjs"
+}
+
