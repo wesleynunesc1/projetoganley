@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const navLinks = [
+const navItems = [
   { href: '/inicio', label: 'Início' },
   { href: '/treinamentos', label: 'Treinamentos' },
   { href: '/categorias', label: 'Categorias' },
@@ -14,204 +14,224 @@ const navLinks = [
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const pathname = usePathname();
   const router = useRouter();
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    const onScroll = () => {
+      setScrolled(window.scrollY > 15);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   useEffect(() => {
-    setMobileOpen(false);
+    setMobileMenuOpen(false);
     setSearchOpen(false);
   }, [pathname]);
 
-  async function handleLogout() {
+  const handleLogout = async () => {
     await fetch('/api/auth/logout', { method: 'POST' });
     router.push('/acesso');
-  }
+  };
 
-  function handleSearch(e: React.FormEvent) {
+  const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
       router.push(`/treinamentos?q=${encodeURIComponent(searchQuery.trim())}`);
       setSearchOpen(false);
       setSearchQuery('');
     }
-  }
+  };
 
   return (
     <>
-      <motion.header
-        className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
-        style={{
-          background: scrolled ? 'rgba(5,5,5,0.85)' : 'transparent',
-          backdropFilter: scrolled ? 'blur(20px)' : 'none',
-          borderBottom: scrolled ? '1px solid rgba(255,255,255,0.06)' : '1px solid transparent',
-        }}
-        initial={{ y: -80, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          scrolled
+            ? 'bg-black/75 backdrop-blur-xl border-b border-white/[0.06] py-3.5 shadow-2xl'
+            : 'bg-transparent border-b border-transparent py-5'
+        }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
-          {/* Logo */}
-          <Link href="/inicio" className="flex-shrink-0">
-            <span className="font-space font-black text-lg tracking-tight">
-              <span className="text-gradient">PROJETO</span>
-              <span className="text-white ml-1">GANLEY</span>
-            </span>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-6">
+          {/* Brand Logo */}
+          <Link href="/inicio" className="group flex items-center gap-3 flex-shrink-0">
+            <div className="flex flex-col">
+              <span className="font-sans font-black text-lg sm:text-xl tracking-tight leading-none text-white flex items-center gap-1.5">
+                <span className="text-gradient-accent">PROJETO</span>
+                <span className="text-white group-hover:text-white/90 transition-colors">GANLEY</span>
+              </span>
+              <span className="text-[9px] uppercase tracking-[0.25em] text-ganley-gray-dark font-medium mt-1">
+                High Performance
+              </span>
+            </div>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-1">
-            {navLinks.map((link) => {
-              const isActive = pathname === link.href || pathname.startsWith(link.href + '/');
+          <nav className="hidden md:flex items-center gap-1 lg:gap-2">
+            {navItems.map((item) => {
+              const isActive = pathname === item.href || (item.href !== '/inicio' && pathname.startsWith(item.href));
               return (
                 <Link
-                  key={link.href}
-                  href={link.href}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                  key={item.href}
+                  href={item.href}
+                  className={`relative px-4 py-2 rounded-full text-sm font-sans tracking-tight transition-all duration-200 ${
                     isActive
-                      ? 'text-white bg-white/10'
-                      : 'text-ganley-gray hover:text-white hover:bg-white/5'
+                      ? 'text-white font-semibold'
+                      : 'text-ganley-gray hover:text-white hover:bg-white/[0.04]'
                   }`}
                 >
-                  {link.label}
+                  {item.label}
+                  {isActive && (
+                    <motion.div
+                      layoutId="activeNavIndicator"
+                      className="absolute inset-0 rounded-full bg-white/[0.08] border border-white/[0.1] -z-10"
+                      transition={{ type: 'spring', stiffness: 350, damping: 30 }}
+                    />
+                  )}
                 </Link>
               );
             })}
           </nav>
 
-          {/* Right actions */}
-          <div className="flex items-center gap-2">
-            {/* Search button */}
+          {/* Right Actions */}
+          <div className="flex items-center gap-3">
+            {/* Search Trigger */}
             <button
               onClick={() => setSearchOpen(!searchOpen)}
-              className="p-2 rounded-full text-ganley-gray hover:text-white hover:bg-white/5 transition-all"
-              aria-label="Pesquisar"
+              className="p-2.5 rounded-full text-ganley-gray hover:text-white hover:bg-white/[0.05] transition-all"
+              aria-label="Abrir pesquisa"
+            >
+              <svg className="w-4 h-4 sm:w-4.5 sm:h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+              </svg>
+            </button>
+
+            {/* Member Area Pill */}
+            <div className="hidden sm:flex items-center gap-2 pl-2 border-l border-white/[0.08]">
+              <Link
+                href="/minha-evolucao"
+                className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08] hover:border-white/[0.18] transition-all text-xs font-sans text-white/90"
+              >
+                <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                <span>Membro</span>
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="p-2 rounded-full text-ganley-gray hover:text-ganley-magenta hover:bg-white/[0.05] transition-all"
+                title="Sair da plataforma"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Mobile Menu Toggle */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-2 rounded-full text-ganley-gray hover:text-white hover:bg-white/[0.05] transition-all"
+              aria-label="Abrir menu mobile"
             >
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-              </svg>
-            </button>
-
-            {/* User menu */}
-            <button
-              onClick={handleLogout}
-              className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full text-sm text-ganley-gray hover:text-white border border-white/10 hover:border-white/20 transition-all"
-            >
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
-              </svg>
-              Sair
-            </button>
-
-            {/* Mobile menu button */}
-            <button
-              className="lg:hidden p-2 rounded-full text-ganley-gray hover:text-white hover:bg-white/5 transition-all"
-              onClick={() => setMobileOpen(!mobileOpen)}
-              aria-label="Menu"
-            >
-              <motion.svg
-                className="w-5 h-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                animate={mobileOpen ? 'open' : 'closed'}
-              >
-                {mobileOpen ? (
+                {mobileMenuOpen ? (
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
                 )}
-              </motion.svg>
+              </svg>
             </button>
           </div>
         </div>
 
-        {/* Search bar dropdown */}
+        {/* Global Search Bar Dropdown */}
         <AnimatePresence>
           {searchOpen && (
             <motion.div
-              className="border-t border-white/5"
-              style={{ background: 'rgba(5,5,5,0.95)', backdropFilter: 'blur(20px)' }}
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.2 }}
+              transition={{ duration: 0.25, ease: 'easeInOut' }}
+              className="border-t border-white/[0.06] bg-[#0C0A12]/95 backdrop-blur-2xl overflow-hidden"
             >
-              <div className="max-w-2xl mx-auto px-4 py-4">
-                <form onSubmit={handleSearch}>
-                  <div className="relative">
-                    <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-ganley-gray" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-                    </svg>
-                    <input
-                      autoFocus
-                      type="search"
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder="Buscar treinamento, nível, divisão..."
-                      className="w-full bg-ganley-black-surface border border-ganley-black-border rounded-full pl-12 pr-4 py-3 text-sm text-white placeholder-ganley-gray outline-none focus:border-ganley-purple transition-colors"
-                    />
-                  </div>
+              <div className="max-w-3xl mx-auto px-4 py-4 sm:py-5">
+                <form onSubmit={handleSearchSubmit} className="relative">
+                  <svg
+                    className="absolute left-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-ganley-gray"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                  </svg>
+                  <input
+                    type="search"
+                    autoFocus
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Pesquisar treinamento, divisão, atleta (ex: Ramon Dino, PPL, Upper/Lower)..."
+                    className="w-full bg-white/[0.04] border border-white/[0.1] rounded-full pl-12 pr-28 py-3.5 text-sm text-white placeholder-ganley-gray outline-none focus:border-ganley-purple transition-all"
+                  />
+                  <button
+                    type="submit"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 px-4 py-2 rounded-full text-xs font-semibold bg-white text-black hover:opacity-90 transition-opacity"
+                  >
+                    Buscar
+                  </button>
                 </form>
               </div>
             </motion.div>
           )}
         </AnimatePresence>
-      </motion.header>
+      </header>
 
-      {/* Mobile menu drawer */}
+      {/* Mobile Drawer */}
       <AnimatePresence>
-        {mobileOpen && (
+        {mobileMenuOpen && (
           <>
             <motion.div
-              className="fixed inset-0 z-40 bg-black/60 lg:hidden"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => setMobileOpen(false)}
+              onClick={() => setMobileMenuOpen(false)}
+              className="fixed inset-0 z-40 bg-black/80 backdrop-blur-sm md:hidden"
             />
             <motion.div
-              className="fixed top-16 left-0 right-0 z-50 lg:hidden"
-              style={{ background: 'rgba(5,5,5,0.98)', backdropFilter: 'blur(20px)' }}
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.2 }}
+              initial={{ y: -20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: -20, opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              className="fixed top-18 left-4 right-4 z-50 md:hidden bg-[#0F0D18]/95 backdrop-blur-2xl border border-white/[0.08] rounded-3xl p-6 shadow-2xl"
             >
-              <nav className="px-4 py-6 space-y-1">
-                {navLinks.map((link) => {
-                  const isActive = pathname === link.href || pathname.startsWith(link.href + '/');
+              <nav className="flex flex-col gap-2">
+                {navItems.map((item) => {
+                  const isActive = pathname === item.href;
                   return (
                     <Link
-                      key={link.href}
-                      href={link.href}
-                      className={`flex items-center px-4 py-3 rounded-xl text-base font-medium transition-all ${
+                      key={item.href}
+                      href={item.href}
+                      className={`px-4 py-3 rounded-2xl text-base font-sans tracking-tight transition-all ${
                         isActive
-                          ? 'text-white bg-white/10'
-                          : 'text-ganley-gray hover:text-white hover:bg-white/5'
+                          ? 'bg-white/[0.08] text-white font-semibold'
+                          : 'text-ganley-gray hover:text-white hover:bg-white/[0.03]'
                       }`}
                     >
-                      {link.label}
+                      {item.label}
                     </Link>
                   );
                 })}
-                <div className="divider-gradient my-4" />
+                <div className="h-[1px] bg-white/[0.06] my-2" />
                 <button
                   onClick={handleLogout}
-                  className="flex items-center gap-2 px-4 py-3 rounded-xl text-ganley-gray hover:text-white hover:bg-white/5 transition-all w-full text-left text-base font-medium"
+                  className="flex items-center justify-between px-4 py-3 rounded-2xl text-base text-ganley-magenta font-sans tracking-tight hover:bg-white/[0.03] transition-all"
                 >
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+                  <span>Sair da Plataforma</span>
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                   </svg>
-                  Sair da plataforma
                 </button>
               </nav>
             </motion.div>
@@ -221,4 +241,3 @@ export default function Header() {
     </>
   );
 }
-

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { TRAININGS_CATALOG } from '@/lib/catalog';
 import { Training } from '@/types';
@@ -12,11 +12,10 @@ export default function AdminPage() {
   const [authError, setAuthError] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
 
-  // Admin Dashboard State
   const [trainings, setTrainings] = useState<Training[]>(TRAININGS_CATALOG);
-  const [selectedTraining, setSelectedTraining] = useState<Training | null>(null);
+  const [activeTab, setActiveTab] = useState<'modules' | 'metrics' | 'settings'>('modules');
   const [filterQuery, setFilterQuery] = useState<string>('');
-  const [saveMessage, setSaveMessage] = useState<string>('');
+  const [feedbackMsg, setFeedbackMsg] = useState<string>('');
 
   const handleAdminLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,10 +33,10 @@ export default function AdminPage() {
       if (res.ok && data.success) {
         setIsAdminAuth(true);
       } else {
-        setAuthError(data.error || 'Credenciais inválidas para área restrita.');
+        setAuthError(data.error || 'Credenciais não autorizadas para este ambiente.');
       }
     } catch {
-      setAuthError('Erro ao conectar ao servidor.');
+      setAuthError('Erro ao conectar ao servidor de autenticação.');
     } finally {
       setLoading(false);
     }
@@ -47,16 +46,19 @@ export default function AdminPage() {
     setTrainings((prev) =>
       prev.map((t) => (t.id === id ? { ...t, featured: !t.featured } : t))
     );
-    setSaveMessage('Status de destaque atualizado.');
-    setTimeout(() => setSaveMessage(''), 2500);
+    notify('Destaque atualizado com sucesso.');
   };
 
   const togglePublished = (id: string) => {
     setTrainings((prev) =>
       prev.map((t) => (t.id === id ? { ...t, published: !t.published } : t))
     );
-    setSaveMessage('Status de publicação atualizado.');
-    setTimeout(() => setSaveMessage(''), 2500);
+    notify('Status de visibilidade atualizado.');
+  };
+
+  const notify = (msg: string) => {
+    setFeedbackMsg(msg);
+    setTimeout(() => setFeedbackMsg(''), 2500);
   };
 
   const filtered = trainings.filter(
@@ -65,24 +67,26 @@ export default function AdminPage() {
       t.slug.toLowerCase().includes(filterQuery.toLowerCase())
   );
 
-  // If not authenticated as admin, show login gate
+  // Unauthenticated Admin Gate
   if (!isAdminAuth) {
     return (
-      <div className="min-h-screen bg-ganley-black text-white flex items-center justify-center p-4">
-        <div className="w-full max-w-md bg-[#0F0D18] border border-white/10 rounded-2xl p-8 shadow-2xl">
-          <div className="text-center mb-8">
-            <span className="badge bg-red-500/20 text-red-400 border-red-500/30 text-[11px] uppercase font-bold tracking-wider mb-3">
-              Acesso Restrito
+      <div className="min-h-screen bg-[#050505] text-white flex items-center justify-center p-4">
+        <div className="w-full max-w-[420px] bg-[#0C0A12] border border-white/[0.08] rounded-3xl p-8 sm:p-10 shadow-2xl">
+          <div className="text-center mb-7">
+            <span className="badge-pill bg-ganley-magenta/15 text-ganley-magenta border-ganley-magenta/30 text-[10px] uppercase font-bold tracking-wider mb-4">
+              Restrito — Admin
             </span>
-            <h1 className="font-space font-black text-2xl text-white">Painel Administrativo</h1>
-            <p className="text-xs text-ganley-gray mt-1.5">
-              Informe o e-mail autorizado configurado na variável <code className="text-ganley-orange">ADMIN_EMAIL</code>.
+            <h1 className="font-sans font-extrabold text-2xl text-white tracking-tight">
+              Gestão da Plataforma
+            </h1>
+            <p className="text-xs text-ganley-gray mt-1.5 font-normal">
+              Acesso exclusivo para o e-mail autorizado em <code className="text-ganley-orange">ADMIN_EMAIL</code>.
             </p>
           </div>
 
           <form onSubmit={handleAdminLogin} className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-ganley-gray mb-1.5">
+              <label className="block text-xs font-semibold text-ganley-gray mb-1.5 font-sans">
                 E-mail do Administrador
               </label>
               <input
@@ -91,20 +95,20 @@ export default function AdminPage() {
                 value={emailInput}
                 onChange={(e) => setEmailInput(e.target.value)}
                 placeholder="admin@projetoganley.com"
-                className="input-ganley text-sm"
+                className="w-full bg-[#15101E] border border-white/[0.1] rounded-2xl px-4 py-3 text-sm text-white placeholder-ganley-gray/50 outline-none focus:border-ganley-purple"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-ganley-gray mb-1.5">
-                Chave de Acesso Admin (opcional se não definida)
+              <label className="block text-xs font-semibold text-ganley-gray mb-1.5 font-sans">
+                Chave de Acesso Admin
               </label>
               <input
                 type="password"
                 value={keyInput}
                 onChange={(e) => setKeyInput(e.target.value)}
                 placeholder="Chave master ou senha"
-                className="input-ganley text-sm"
+                className="w-full bg-[#15101E] border border-white/[0.1] rounded-2xl px-4 py-3 text-sm text-white placeholder-ganley-gray/50 outline-none focus:border-ganley-purple"
               />
             </div>
 
@@ -115,14 +119,14 @@ export default function AdminPage() {
             <button
               type="submit"
               disabled={loading}
-              className="btn-primary w-full py-3.5 text-sm font-bold"
+              className="btn-accent w-full py-3.5 text-xs font-bold uppercase tracking-wider"
             >
-              {loading ? 'Verificando...' : 'Entrar na Administração'}
+              {loading ? 'Validando...' : 'Entrar no Painel'}
             </button>
 
-            <div className="text-center pt-4 border-t border-white/5">
+            <div className="text-center pt-4 border-t border-white/[0.06]">
               <Link href="/inicio" className="text-xs text-ganley-gray hover:text-white transition-colors">
-                ← Voltar para a Área de Membros
+                ← Voltar para a Área do Membro
               </Link>
             </div>
           </form>
@@ -132,100 +136,153 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="min-h-screen bg-ganley-black text-white flex flex-col">
-      {/* Admin Topbar */}
-      <header className="border-b border-white/10 bg-[#0E0C16] px-6 py-4 flex items-center justify-between sticky top-0 z-30">
-        <div className="flex items-center gap-3">
-          <span className="font-space font-black text-base text-gradient">GANLEY ADMIN</span>
-          <span className="badge bg-emerald-500/20 text-emerald-400 border-emerald-500/30 text-[10px]">
-            Sessão Ativa
-          </span>
+    <div className="min-h-screen bg-[#050505] text-white flex flex-col md:flex-row">
+      {/* Admin Sidebar */}
+      <aside className="w-full md:w-64 bg-[#0C0A12] border-r border-white/[0.08] p-6 flex flex-col justify-between flex-shrink-0">
+        <div>
+          {/* Brand */}
+          <div className="mb-8">
+            <span className="font-sans font-black text-lg tracking-tight text-white flex items-center gap-1.5">
+              <span className="text-gradient-accent">GANLEY</span>
+              <span>ADMIN</span>
+            </span>
+            <span className="text-[10px] text-ganley-gray-dark uppercase tracking-widest block mt-0.5">
+              Controle Editorial
+            </span>
+          </div>
+
+          {/* Navigation Menu */}
+          <nav className="space-y-1.5 font-sans text-xs">
+            <button
+              onClick={() => setActiveTab('modules')}
+              className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl transition-all ${
+                activeTab === 'modules'
+                  ? 'bg-white/[0.08] text-white font-semibold'
+                  : 'text-ganley-gray hover:text-white hover:bg-white/[0.03]'
+              }`}
+            >
+              <svg className="w-4 h-4 text-ganley-purple" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+              </svg>
+              <span>Módulos de Treino ({trainings.length})</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('metrics')}
+              className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl transition-all ${
+                activeTab === 'metrics'
+                  ? 'bg-white/[0.08] text-white font-semibold'
+                  : 'text-ganley-gray hover:text-white hover:bg-white/[0.03]'
+              }`}
+            >
+              <svg className="w-4 h-4 text-ganley-orange" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              </svg>
+              <span>Relatório de Arquivos</span>
+            </button>
+          </nav>
         </div>
 
-        <div className="flex items-center gap-4">
-          {saveMessage && (
-            <span className="text-xs text-emerald-400 font-medium animate-fade-in">
-              ✓ {saveMessage}
-            </span>
-          )}
+        {/* Sidebar Footer */}
+        <div className="pt-6 border-t border-white/[0.06] space-y-3">
           <Link
             href="/inicio"
-            className="text-xs text-ganley-gray hover:text-white transition-colors"
+            className="flex items-center gap-2 text-xs text-ganley-gray hover:text-white transition-colors"
           >
-            Ver Plataforma
+            <span>← Ir para a Plataforma</span>
           </Link>
           <button
             onClick={() => setIsAdminAuth(false)}
             className="text-xs text-ganley-magenta hover:underline"
           >
-            Sair do Admin
+            Encerrar sessão admin
           </button>
         </div>
-      </header>
+      </aside>
 
-      {/* Admin Main Body */}
-      <main className="flex-1 p-6 max-w-7xl mx-auto w-full">
-        {/* Statistics Header */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-          <div className="bg-[#0F0D18] border border-white/10 rounded-xl p-4">
-            <span className="text-xs text-ganley-gray uppercase font-semibold">Total de Módulos</span>
+      {/* Admin Content Area */}
+      <main className="flex-1 p-6 sm:p-10 max-w-7xl w-full">
+        {/* Top Header */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+          <div>
+            <h1 className="font-sans font-extrabold text-2xl sm:text-3xl text-white tracking-tight">
+              Gerenciamento dos 20 Programas
+            </h1>
+            <p className="text-xs sm:text-sm text-ganley-gray mt-1">
+              Capas, documentos binários originais e controles de publicação.
+            </p>
+          </div>
+
+          {feedbackMsg && (
+            <span className="px-3.5 py-1.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-xs font-sans font-medium">
+              ✓ {feedbackMsg}
+            </span>
+          )}
+        </div>
+
+        {/* Stats Row */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <div className="rounded-2xl bg-[#0C0A12] border border-white/[0.08] p-5">
+            <span className="text-[11px] font-sans font-semibold text-ganley-gray uppercase tracking-wider">
+              Programas Ativos
+            </span>
             <p className="font-space font-black text-2xl text-white mt-1">{trainings.length}</p>
           </div>
-          <div className="bg-[#0F0D18] border border-white/10 rounded-xl p-4">
-            <span className="text-xs text-ganley-gray uppercase font-semibold">Capas Vinculadas</span>
-            <p className="font-space font-black text-2xl text-emerald-400 mt-1">20 / 20 (100%)</p>
+          <div className="rounded-2xl bg-[#0C0A12] border border-white/[0.08] p-5">
+            <span className="text-[11px] font-sans font-semibold text-ganley-gray uppercase tracking-wider">
+              Capas Confirmadas
+            </span>
+            <p className="font-space font-black text-2xl text-emerald-400 mt-1">20 / 20</p>
           </div>
-          <div className="bg-[#0F0D18] border border-white/10 rounded-xl p-4">
-            <span className="text-xs text-ganley-gray uppercase font-semibold">PDFs Integrados</span>
-            <p className="font-space font-black text-2xl text-ganley-purple mt-1">20 / 20 (100%)</p>
+          <div className="rounded-2xl bg-[#0C0A12] border border-white/[0.08] p-5">
+            <span className="text-[11px] font-sans font-semibold text-ganley-gray uppercase tracking-wider">
+              PDFs Integrados
+            </span>
+            <p className="font-space font-black text-2xl text-ganley-purple mt-1">20 / 20</p>
           </div>
-          <div className="bg-[#0F0D18] border border-white/10 rounded-xl p-4">
-            <span className="text-xs text-ganley-gray uppercase font-semibold">Destaques Home</span>
+          <div className="rounded-2xl bg-[#0C0A12] border border-white/[0.08] p-5">
+            <span className="text-[11px] font-sans font-semibold text-ganley-gray uppercase tracking-wider">
+              Destaques na Home
+            </span>
             <p className="font-space font-black text-2xl text-ganley-orange mt-1">
               {trainings.filter((t) => t.featured).length}
             </p>
           </div>
         </div>
 
-        {/* Modules Table & Inspector */}
-        <div className="bg-[#0F0D18] border border-white/10 rounded-2xl overflow-hidden shadow-2xl">
-          <div className="p-4 sm:p-6 border-b border-white/10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-            <div>
-              <h2 className="font-space font-bold text-lg text-white">Catálogo de Treinamentos Importados</h2>
-              <p className="text-xs text-ganley-gray mt-0.5">
-                Todos os 20 programas mapeados e validados contra arquivos originais.
-              </p>
-            </div>
-
+        {/* Modules Table */}
+        <div className="rounded-3xl bg-[#0C0A12] border border-white/[0.08] overflow-hidden shadow-2xl">
+          <div className="p-5 border-b border-white/[0.08] flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <h2 className="font-sans font-bold text-base text-white">Catálogo Mapeado</h2>
             <input
               type="text"
               value={filterQuery}
               onChange={(e) => setFilterQuery(e.target.value)}
-              placeholder="Filtrar módulos..."
-              className="bg-ganley-black-surface border border-white/10 rounded-lg px-3 py-1.5 text-xs text-white placeholder-ganley-gray outline-none w-full sm:w-64"
+              placeholder="Filtrar por nome ou slug..."
+              className="bg-[#15101E] border border-white/[0.08] rounded-xl px-3.5 py-2 text-xs text-white placeholder-ganley-gray outline-none w-full sm:w-64"
             />
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="bg-white/5 border-b border-white/10 text-ganley-gray font-semibold uppercase tracking-wider">
+            <table className="w-full text-left text-xs font-sans">
+              <thead className="bg-white/[0.03] border-b border-white/[0.06] text-ganley-gray font-semibold uppercase tracking-wider text-[10px]">
                 <tr>
                   <th className="p-3.5">Capa</th>
-                  <th className="p-3.5">Título / Slug</th>
+                  <th className="p-3.5">Título & Identificador</th>
                   <th className="p-3.5">Nível</th>
                   <th className="p-3.5">Freq.</th>
                   <th className="p-3.5">Arquivo PDF</th>
                   <th className="p-3.5">Tamanho</th>
                   <th className="p-3.5 text-center">Destaque</th>
                   <th className="p-3.5 text-center">Status</th>
-                  <th className="p-3.5 text-right">Ação</th>
+                  <th className="p-3.5 text-right">Leitor</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/5">
+              <tbody className="divide-y divide-white/[0.05]">
                 {filtered.map((t) => (
                   <tr key={t.id} className="hover:bg-white/[0.02] transition-colors">
                     <td className="p-3.5">
-                      <div className="w-10 h-14 rounded overflow-hidden bg-black border border-white/10">
+                      <div className="w-10 h-14 rounded-lg overflow-hidden bg-black border border-white/[0.08]">
                         <img
                           src={`/api/cover/${t.slug}`}
                           alt={t.title}
@@ -238,7 +295,7 @@ export default function AdminPage() {
                       <p className="text-ganley-gray text-[10px] font-mono mt-0.5">{t.slug}</p>
                     </td>
                     <td className="p-3.5">
-                      <span className="badge badge-level-beginner text-[10px] uppercase">
+                      <span className="badge-pill bg-white/[0.04] text-white border-white/[0.08] text-[10px] uppercase">
                         {t.level}
                       </span>
                     </td>
@@ -258,10 +315,10 @@ export default function AdminPage() {
                     <td className="p-3.5 text-center">
                       <button
                         onClick={() => toggleFeatured(t.id)}
-                        className={`p-1.5 rounded-md text-xs font-semibold transition-all ${
+                        className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${
                           t.featured
                             ? 'bg-ganley-orange/20 text-ganley-orange border border-ganley-orange/30'
-                            : 'bg-white/5 text-ganley-gray border border-white/5 hover:text-white'
+                            : 'bg-white/[0.04] text-ganley-gray border border-white/[0.06] hover:text-white'
                         }`}
                       >
                         {t.featured ? '★ Sim' : 'Não'}
@@ -270,22 +327,22 @@ export default function AdminPage() {
                     <td className="p-3.5 text-center">
                       <button
                         onClick={() => togglePublished(t.id)}
-                        className={`p-1.5 rounded-md text-[10px] font-semibold uppercase tracking-wider transition-all ${
+                        className={`px-2.5 py-1 rounded-lg text-[10px] font-semibold uppercase tracking-wider transition-all ${
                           t.published
-                            ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
-                            : 'bg-red-500/20 text-red-400 border border-red-500/30'
+                            ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
+                            : 'bg-red-500/15 text-red-400 border border-red-500/30'
                         }`}
                       >
-                        {t.published ? 'Publicado' : 'Oculto'}
+                        {t.published ? 'Ativo' : 'Oculto'}
                       </button>
                     </td>
                     <td className="p-3.5 text-right">
                       <Link
                         href={`/treinamentos/${t.slug}`}
                         target="_blank"
-                        className="text-ganley-purple-light hover:underline font-medium"
+                        className="text-ganley-purple-light hover:text-white transition-colors font-medium text-xs"
                       >
-                        Abrir Leitor →
+                        Visualizar →
                       </Link>
                     </td>
                   </tr>
@@ -298,4 +355,3 @@ export default function AdminPage() {
     </div>
   );
 }
-

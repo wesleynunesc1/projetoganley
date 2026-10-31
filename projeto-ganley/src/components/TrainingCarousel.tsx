@@ -50,26 +50,32 @@ export default function TrainingCarousel({
   return (
     <section className="py-6 sm:py-8 relative">
       {/* Section Header */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 mb-4 flex items-end justify-between">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-4 sm:mb-5 flex items-end justify-between">
         <div>
-          <h2 className="section-heading flex items-center gap-2">
-            <span>{title}</span>
-            <span className="text-xs font-normal text-ganley-gray-dark px-2 py-0.5 rounded-full bg-white/5 border border-white/5">
+          <div className="flex items-center gap-2.5">
+            <h2 className="font-sans font-bold text-xl sm:text-2xl text-white tracking-tight">
+              {title}
+            </h2>
+            <span className="text-[11px] font-sans font-semibold text-ganley-gray px-2 py-0.5 rounded-full bg-white/[0.05] border border-white/[0.08]">
               {trainings.length}
             </span>
-          </h2>
+          </div>
           {subtitle && (
-            <p className="text-ganley-gray text-xs sm:text-sm mt-1">{subtitle}</p>
+            <p className="text-ganley-gray text-xs sm:text-sm mt-1 font-sans font-normal">
+              {subtitle}
+            </p>
           )}
         </div>
 
+        {/* Controls */}
         <div className="flex items-center gap-2">
           {viewAllHref && (
             <Link
               href={viewAllHref}
-              className="text-xs sm:text-sm text-ganley-purple-light hover:text-white transition-colors font-medium mr-2"
+              className="text-xs sm:text-sm font-sans font-medium text-ganley-purple-light hover:text-white transition-colors mr-2 flex items-center gap-1"
             >
-              Ver todos →
+              <span>Ver todos</span>
+              <span>→</span>
             </Link>
           )}
 
@@ -78,17 +84,18 @@ export default function TrainingCarousel({
             onClick={() => scroll('left')}
             disabled={!canScrollLeft}
             aria-label="Rolar para esquerda"
-            className="hidden sm:flex w-9 h-9 rounded-full items-center justify-center border border-white/10 bg-black/40 text-white disabled:opacity-20 disabled:cursor-not-allowed hover:bg-white/10 transition-all"
+            className="hidden sm:flex w-9 h-9 rounded-full items-center justify-center border border-white/[0.08] bg-black/60 text-white disabled:opacity-20 disabled:cursor-not-allowed hover:bg-white/[0.1] hover:border-white/[0.2] transition-all backdrop-blur-md"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
           </button>
+
           <button
             onClick={() => scroll('right')}
             disabled={!canScrollRight}
             aria-label="Rolar para direita"
-            className="hidden sm:flex w-9 h-9 rounded-full items-center justify-center border border-white/10 bg-black/40 text-white disabled:opacity-20 disabled:cursor-not-allowed hover:bg-white/10 transition-all"
+            className="hidden sm:flex w-9 h-9 rounded-full items-center justify-center border border-white/[0.08] bg-black/60 text-white disabled:opacity-20 disabled:cursor-not-allowed hover:bg-white/[0.1] hover:border-white/[0.2] transition-all backdrop-blur-md"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -101,12 +108,12 @@ export default function TrainingCarousel({
       <div
         ref={containerRef}
         onScroll={checkScroll}
-        className="flex gap-4 sm:gap-6 overflow-x-auto pb-4 pt-1 px-4 sm:px-6 max-w-7xl mx-auto carousel-scroll"
+        className="flex gap-4 sm:gap-6 overflow-x-auto pb-5 pt-1 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto carousel-scroll"
       >
         {trainings.map((training) => (
           <div
             key={training.id}
-            className="w-[200px] sm:w-[240px] md:w-[260px] flex-shrink-0 carousel-item"
+            className="w-[210px] sm:w-[240px] md:w-[260px] flex-shrink-0 carousel-item"
           >
             <TrainingCard training={training} />
           </div>
@@ -115,4 +122,3 @@ export default function TrainingCarousel({
     </section>
   );
 }
-

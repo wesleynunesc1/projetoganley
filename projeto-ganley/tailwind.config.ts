@@ -11,70 +11,53 @@ const config: Config = {
       colors: {
         ganley: {
           black: '#050505',
-          'black-secondary': '#0D0B13',
-          'black-card': '#0F0D18',
-          'black-surface': '#13111E',
-          'black-border': '#1E1B2E',
+          'surface-1': '#0C0A12',
+          'surface-2': '#15101E',
+          'surface-3': '#1E172B',
+          white: '#FFFFFF',
+          gray: '#9996A3',
+          'gray-light': '#C5C3CD',
+          'gray-dark': '#555263',
+          'gray-muted': '#2E2B38',
           purple: '#9747FF',
-          'purple-light': '#B06AFF',
-          'purple-dark': '#7429E0',
+          'purple-light': '#B372FF',
+          'purple-dark': '#6C25D9',
           magenta: '#FF2689',
+          'magenta-light': '#FF5CA5',
           orange: '#FF9C2B',
-          gray: '#A5A3AD',
-          'gray-dark': '#6B6880',
-          'gray-muted': '#3A3750',
+          'orange-light': '#FFB55E',
         },
       },
       fontFamily: {
-        sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
+        sans: ['var(--font-sans)', 'system-ui', '-apple-system', 'sans-serif'],
         space: ['var(--font-space)', 'system-ui', 'sans-serif'],
       },
       backgroundImage: {
-        'gradient-main': 'linear-gradient(90deg, #FF9C2B 0%, #FF2689 48%, #9747FF 100%)',
-        'gradient-diagonal': 'linear-gradient(135deg, #FF9C2B 0%, #FF2689 50%, #9747FF 100%)',
-        'gradient-dark': 'linear-gradient(180deg, #0D0B13 0%, #050505 100%)',
-        'gradient-card': 'linear-gradient(180deg, transparent 0%, rgba(5,5,5,0.95) 70%)',
+        'gradient-accent': 'linear-gradient(100deg, #FF9C2B 0%, #FF2689 48%, #9747FF 100%)',
+        'gradient-accent-vertical': 'linear-gradient(180deg, #FF9C2B 0%, #FF2689 50%, #9747FF 100%)',
+        'gradient-surface': 'linear-gradient(180deg, rgba(21,16,30,0.6) 0%, rgba(12,10,18,0.9) 100%)',
+        'gradient-card-overlay': 'linear-gradient(180deg, rgba(5,5,5,0) 0%, rgba(5,5,5,0.4) 40%, rgba(5,5,5,0.95) 100%)',
+        'gradient-hero-overlay': 'linear-gradient(180deg, rgba(5,5,5,0.2) 0%, rgba(5,5,5,0.7) 60%, #050505 100%)',
       },
       boxShadow: {
-        'card': '0 4px 24px rgba(0,0,0,0.5)',
-        'card-hover': '0 8px 40px rgba(151,71,255,0.2)',
-        'glow-purple': '0 0 30px rgba(151,71,255,0.3)',
-        'glow-magenta': '0 0 20px rgba(255,38,137,0.2)',
-        'inner-purple': 'inset 0 1px 0 rgba(151,71,255,0.1)',
+        'ambient-purple': '0 0 50px -10px rgba(151,71,255,0.25)',
+        'ambient-magenta': '0 0 50px -10px rgba(255,38,137,0.2)',
+        'card-elevated': '0 20px 40px -15px rgba(0,0,0,0.8), 0 0 1px 1px rgba(255,255,255,0.05)',
+        'card-hover': '0 25px 50px -12px rgba(151,71,255,0.2), 0 0 1px 1px rgba(151,71,255,0.3)',
+        'pill': '0 4px 20px rgba(151,71,255,0.25)',
       },
-      animation: {
-        'fade-in': 'fadeIn 0.4s ease forwards',
-        'slide-up': 'slideUp 0.5s ease forwards',
-        'pulse-glow': 'pulseGlow 2s ease-in-out infinite',
-        'gradient-shift': 'gradientShift 4s ease infinite',
+      borderRadius: {
+        '3xl': '1.5rem',
+        '4xl': '2rem',
       },
-      keyframes: {
-        fadeIn: {
-          from: { opacity: '0' },
-          to: { opacity: '1' },
-        },
-        slideUp: {
-          from: { opacity: '0', transform: 'translateY(24px)' },
-          to: { opacity: '1', transform: 'translateY(0)' },
-        },
-        pulseGlow: {
-          '0%, 100%': { boxShadow: '0 0 20px rgba(151,71,255,0.2)' },
-          '50%': { boxShadow: '0 0 40px rgba(151,71,255,0.4)' },
-        },
-        gradientShift: {
-          '0%, 100%': { backgroundPosition: '0% 50%' },
-          '50%': { backgroundPosition: '100% 50%' },
-        },
+      letterSpacing: {
+        'tightest': '-0.035em',
+        'tighter': '-0.025em',
+        'tight': '-0.015em',
+        'wide-pill': '0.08em',
       },
-      transitionDuration: {
-        '250': '250ms',
-        '400': '400ms',
-      },
-      backdropBlur: {
-        'glass': '20px',
-      },
-      screens: {
-        'xs': '375px',
+      transitionTimingFunction: {
+        'editorial': 'cubic-bezier(0.16, 1, 0.3, 1)',
       },
     },
   },
@@ -82,4 +65,3 @@ const config: Config = {
 };
 
 export default config;
-

@@ -9,7 +9,6 @@ interface CategoryItem {
   subtitle: string;
   description: string;
   tag: string;
-  gradient: string;
   count: number;
 }
 
@@ -19,102 +18,93 @@ export default function CategoriasPage() {
       id: 'recomendacoes',
       title: 'Recomendações Gerais',
       subtitle: 'Fundamentos e Diretrizes',
-      description: 'Princípios essenciais de treinamento, execução, aquecimento e segurança.',
-      tag: 'Base',
-      gradient: 'from-amber-500/20 to-orange-500/20 border-amber-500/30',
+      description: 'Princípios essenciais de treinamento, execução, aquecimento e segurança articular.',
+      tag: 'Fundamento',
       count: TRAININGS_CATALOG.filter((t) => t.category.includes('recomendacoes')).length,
     },
     {
       id: 'iniciantes',
-      title: 'Iniciantes',
-      subtitle: 'Adaptação e Frequência Inicial',
-      description: 'Programas de 2x e 4x na semana com progressão segura para quem está começando.',
-      tag: 'Nível 1',
-      gradient: 'from-emerald-500/20 to-teal-500/20 border-emerald-500/30',
+      title: 'Iniciantes & Adaptação',
+      subtitle: 'Frequência de 2x a 4x Semanais',
+      description: 'Programas progressivos focados em construir coordenação motora e base estrutural.',
+      tag: 'Base',
       count: TRAININGS_CATALOG.filter((t) => t.category.includes('iniciantes')).length,
     },
     {
       id: 'upper-lower',
-      title: 'Upper / Lower',
-      subtitle: 'Divisão Superior e Inferior',
-      description: 'Excelente equilíbrio entre estímulo muscular e descanso semanal.',
+      title: 'Divisões Upper / Lower',
+      subtitle: 'Membros Superiores e Inferiores',
+      description: 'Estímulo equilibrado duas vezes por semana com excelente recuperação neuromuscular.',
       tag: 'Divisão',
-      gradient: 'from-blue-500/20 to-indigo-500/20 border-blue-500/30',
       count: TRAININGS_CATALOG.filter((t) => t.category.includes('upper-lower')).length,
     },
     {
       id: 'ppl',
       title: 'Metodologia PPL',
-      subtitle: 'Push / Pull / Legs',
-      description: 'Divisão em empurrar, puxar e membros inferiores em 3x ou 6x semanais.',
-      tag: 'Divisão',
-      gradient: 'from-purple-500/20 to-pink-500/20 border-purple-500/30',
+      subtitle: 'Push / Pull / Legs (3x e 6x)',
+      description: 'Divisão científica em empurrar, puxar e pernas com alto controle de fadiga.',
+      tag: 'Metodologia',
       count: TRAININGS_CATALOG.filter((t) => t.category.includes('ppl')).length,
     },
     {
       id: 'abcd',
       title: 'Divisões ABCD',
       subtitle: 'Intermediários e Avançados',
-      description: 'Quatro sessões de treino com isolamento de grupos e volume específico.',
+      description: 'Quatro sessões semanais permitindo maior volume concentrado por grupo muscular.',
       tag: 'Volume',
-      gradient: 'from-teal-500/20 to-cyan-500/20 border-teal-500/30',
       count: TRAININGS_CATALOG.filter((t) => t.category.includes('abcd')).length,
     },
     {
       id: 'abcde',
       title: 'Divisões ABCDE',
       subtitle: 'Ênfase em Superiores ou Inferiores',
-      description: 'Cinco dias de treino direcionados para pontos fracos e máxima hipertrofia.',
+      description: 'Cinco dias de treino direcionados para lapidação de pontos fracos e máxima hipertrofia.',
       tag: 'Ênfase',
-      gradient: 'from-orange-500/20 to-red-500/20 border-orange-500/30',
       count: TRAININGS_CATALOG.filter((t) => t.category.includes('abcde')).length,
     },
     {
       id: 'abcdef',
       title: 'Divisões ABCDEF',
-      subtitle: 'Super Avançados & Pro',
-      description: 'Volume extremo e máxima dedicação em seis sessões semanais intensas.',
-      tag: 'Avançado',
-      gradient: 'from-purple-600/20 to-indigo-600/20 border-purple-500/30',
+      subtitle: 'Super Avançados & Elite',
+      description: 'Seis sessões de alto volume e intensidade para atletas em estágio avançado.',
+      tag: 'Alta Intensidade',
       count: TRAININGS_CATALOG.filter((t) => t.category.includes('abcdef')).length,
     },
     {
       id: 'feminino',
       title: 'Treinamentos Femininos',
-      subtitle: 'Proporção, Glúteos e Coxas',
-      description: 'Divisões estruturadas especialmente para objetivos femininos de 2x a 4x na semana.',
+      subtitle: 'Periodizações Específicas',
+      description: 'Rotinas estruturadas com foco em membros inferiores, glúteos e harmonia estética.',
       tag: 'Feminino',
-      gradient: 'from-pink-500/20 to-rose-500/20 border-pink-500/30',
       count: TRAININGS_CATALOG.filter((t) => t.category.includes('feminino')).length,
     },
     {
       id: 'especiais',
-      title: 'Protocolos Olympia',
+      title: 'Protocolos Nível Olympia',
       subtitle: 'Ramon Dino, Derek, Ali Bilal, Zanca',
-      description: 'Rotinas inspiradas em atletas de elite do fisiculturismo mundial.',
-      tag: 'Elite',
-      gradient: 'from-yellow-500/20 to-amber-500/20 border-yellow-500/30',
+      description: 'Rotinas inspiradas nos maiores atletas profissionais do fisiculturismo mundial.',
+      tag: 'Pro / Elite',
       count: TRAININGS_CATALOG.filter((t) => t.category.includes('especiais')).length,
     },
   ];
 
   return (
-    <div className="min-h-screen bg-ganley-black text-white flex flex-col">
+    <div className="min-h-screen bg-[#050505] text-white flex flex-col">
       <Header />
 
-      <main className="flex-1 pt-24 pb-16 px-4 sm:px-6 max-w-7xl mx-auto w-full">
-        {/* Page Title */}
+      <main className="flex-1 pt-28 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+        {/* Header */}
         <div className="mb-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 mb-3">
-            <span className="text-xs uppercase font-semibold text-ganley-purple-light tracking-wider">
-              Navegação Estruturada
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/[0.04] border border-white/[0.08] mb-4 backdrop-blur-md">
+            <span className="text-[10px] font-sans font-semibold tracking-wider text-ganley-purple-light uppercase">
+              Organização Estruturada
             </span>
           </div>
-          <h1 className="font-space font-black text-3xl sm:text-4xl text-white">
+          <h1 className="font-sans font-extrabold text-3xl sm:text-5xl text-white tracking-tight">
             Categorias de Treinamento
           </h1>
-          <p className="text-ganley-gray text-sm sm:text-base mt-2 max-w-xl">
-            Escolha sua linha de evolução física de acordo com sua frequência semanal, nível e metodologia preferida.
+          <p className="text-ganley-gray text-sm sm:text-base mt-2.5 max-w-2xl font-normal leading-relaxed">
+            Selecione uma das divisões metodológicas para acessar os programas correspondentes com abertura integrada.
           </p>
         </div>
 
@@ -126,32 +116,32 @@ export default function CategoriasPage() {
               href={`/treinamentos?category=${cat.id}`}
               className="group block"
             >
-              <div
-                className={`relative rounded-2xl overflow-hidden p-6 border bg-gradient-to-br ${cat.gradient} bg-[#0F0D18] hover:scale-[1.02] transition-all duration-300 shadow-xl flex flex-col justify-between h-full min-h-[200px]`}
-              >
+              <div className="relative rounded-3xl overflow-hidden p-6 sm:p-7 bg-[#0C0A12] border border-white/[0.07] group-hover:border-ganley-purple/50 group-hover:shadow-ambient-purple transition-all duration-300 flex flex-col justify-between h-full min-h-[220px]">
+                {/* Top Details */}
                 <div>
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="badge bg-white/10 text-white border-white/10 text-[11px] font-semibold">
+                  <div className="flex items-center justify-between gap-2 mb-3">
+                    <span className="badge-pill bg-white/[0.04] text-white/80 border-white/[0.08] text-[11px] font-sans font-semibold">
                       {cat.tag}
                     </span>
-                    <span className="text-xs text-ganley-gray font-medium">
-                      {cat.count} {cat.count === 1 ? 'treinamento' : 'treinamentos'}
+                    <span className="text-xs font-sans text-ganley-gray">
+                      {cat.count} {cat.count === 1 ? 'programa' : 'programas'}
                     </span>
                   </div>
 
-                  <h2 className="font-space font-bold text-xl text-white group-hover:text-ganley-purple-light transition-colors">
+                  <h2 className="font-sans font-bold text-xl text-white group-hover:text-ganley-purple-light transition-colors tracking-tight">
                     {cat.title}
                   </h2>
-                  <p className="text-xs text-ganley-orange-light font-medium mt-0.5">
+                  <p className="text-xs font-sans text-ganley-orange-light font-medium mt-1">
                     {cat.subtitle}
                   </p>
-                  <p className="text-xs text-ganley-gray mt-2 leading-relaxed">
+                  <p className="text-xs text-ganley-gray mt-2.5 leading-relaxed font-sans font-normal">
                     {cat.description}
                   </p>
                 </div>
 
-                <div className="pt-4 border-t border-white/5 flex items-center justify-between text-xs text-white/70 group-hover:text-white transition-colors">
-                  <span>Acessar categoria</span>
+                {/* Bottom Action Indicator */}
+                <div className="pt-5 mt-4 border-t border-white/[0.05] flex items-center justify-between text-xs font-sans text-white/60 group-hover:text-white transition-colors">
+                  <span>Explorar programas</span>
                   <span className="group-hover:translate-x-1 transition-transform">→</span>
                 </div>
               </div>
@@ -164,4 +154,3 @@ export default function CategoriasPage() {
     </div>
   );
 }
-
