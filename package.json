@@ -6,9 +6,8 @@
     "projeto-ganley"
   ],
   "scripts": {
-    "build": "npm run build --prefix projeto-ganley",
-    "start": "npm run start --prefix projeto-ganley",
-    "dev": "npm run dev --prefix projeto-ganley"
+    "build": "npm run build -w projeto-ganley",
+    "start": "npm run start -w projeto-ganley",
+    "dev": "npm run dev -w projeto-ganley"
   }
 }
-
