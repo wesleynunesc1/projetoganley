@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+projeto-ganley/node_modules/
+
+# Next.js Build
+.next/
+projeto-ganley/.next/
+out/
+projeto-ganley/out/
+
+# Environment Variables — NUNCA commitar senhas e chaves
+.env
+.env*.local
+*.env
+projeto-ganley/.env
+projeto-ganley/.env.local
+projeto-ganley/.env*.local
+
+# Database local
+*.db
+*.sqlite
+*.sqlite3
+data/
+projeto-ganley/data/
+
+# OS and Cache files
+.DS_Store
+Thumbs.db
+npm-debug.log*
+yarn-debug.log*
+
+# Vercel
+.vercel

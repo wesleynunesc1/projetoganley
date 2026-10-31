@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192">
+  <defs>
+    <linearGradient id="ganleyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF9C2B" />
+      <stop offset="50%" stop-color="#FF2689" />
+      <stop offset="100%" stop-color="#9747FF" />
+    </linearGradient>
+  </defs>
+  <rect width="192" height="192" rx="48" fill="#050505" />
+  <rect x="6" y="6" width="180" height="180" rx="42" fill="none" stroke="url(#ganleyGrad)" stroke-width="3" opacity="0.4"/>
+  <path d="M 96 45 L 135 142 L 114 142 L 107 120 L 85 120 L 78 142 L 57 142 Z M 96 82 L 89 105 L 103 105 Z" fill="url(#ganleyGrad)" />
+  <circle cx="96" cy="38" r="5" fill="#FF9C2B" />
+</svg>
