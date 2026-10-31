@@ -147,3 +147,4 @@ export default function Hero({ featuredTrainings }: HeroProps) {
     </div>
   );
 }
+

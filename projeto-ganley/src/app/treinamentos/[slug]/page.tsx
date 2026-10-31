@@ -324,3 +324,4 @@ export default function TrainingViewPage({ params }: PageProps) {
     </div>
   );
 }
+

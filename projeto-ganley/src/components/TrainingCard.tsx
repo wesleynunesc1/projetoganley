@@ -116,3 +116,4 @@ export default function TrainingCard({ training, progress, priority = false }: T
     </Link>
   );
 }
+
