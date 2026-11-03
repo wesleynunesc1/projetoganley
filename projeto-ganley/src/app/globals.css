@@ -1,198 +1,236 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@config "../../tailwind.config.ts";
 
 /* ================================================================
    PROJETO GANLEY — Design System 2.0 (Premium Platform Redesign)
    Conceito: Ticto + Netflix + Fitness de Alta Performance
 ================================================================ */
 
-@layer base {
-  :root {
-    /* Superfícies principais */
-    --bg-main: #050505;
-    --bg-surface-1: #0C0A12;
-    --bg-surface-2: #15101E;
-    --bg-surface-3: #1E172B;
+:root {
+  /* Superfícies principais */
+  --bg-main: #050505;
+  --bg-surface-1: #0C0A12;
+  --bg-surface-2: #15101E;
+  --bg-surface-3: #1E172B;
 
-    /* Acentos */
-    --color-orange: #FF9C2B;
-    --color-magenta: #FF2689;
-    --color-purple: #9747FF;
+  /* Acentos */
+  --color-orange: #FF9C2B;
+  --color-magenta: #FF2689;
+  --color-purple: #9747FF;
 
-    /* Neutros */
-    --color-white: #FFFFFF;
-    --color-gray: #9996A3;
-    --color-gray-dark: #555263;
+  /* Neutros */
+  --color-white: #FFFFFF;
+  --color-gray: #9996A3;
+  --color-gray-dark: #555263;
 
-    /* Gradiente Principal 100deg */
-    --gradient-accent: linear-gradient(100deg, #FF9C2B 0%, #FF2689 48%, #9747FF 100%);
-    --gradient-hero-overlay: linear-gradient(180deg, rgba(5,5,5,0.1) 0%, rgba(5,5,5,0.65) 50%, #050505 100%);
-  }
+  /* Gradiente Principal 100deg */
+  --gradient-accent: linear-gradient(100deg, #FF9C2B 0%, #FF2689 48%, #9747FF 100%);
+  --gradient-hero-overlay: linear-gradient(180deg, rgba(5,5,5,0.1) 0%, rgba(5,5,5,0.65) 50%, #050505 100%);
+}
 
-  * {
-    box-sizing: border-box;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
+* {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
-  html {
-    background-color: var(--bg-main);
-    color: var(--color-white);
-    scroll-behavior: smooth;
-    color-scheme: dark;
-  }
+html {
+  background-color: var(--bg-main);
+  color: var(--color-white);
+  scroll-behavior: smooth;
+  color-scheme: dark;
+}
 
-  body {
-    background-color: var(--bg-main);
-    color: var(--color-white);
-    font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    line-height: 1.5;
-    overflow-x: hidden;
-    min-height: 100vh;
-  }
+body {
+  background-color: var(--bg-main);
+  color: var(--color-white);
+  font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.5;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
 
-  /* Custom Scrollbars */
-  ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
-  ::-webkit-scrollbar-track {
-    background: #050505;
-  }
-  ::-webkit-scrollbar-thumb {
-    background: #252033;
-    border-radius: 9999px;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: #9747FF;
-  }
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #050505;
+}
+::-webkit-scrollbar-thumb {
+  background: #252033;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #9747FF;
+}
 
-  /* Motion safety */
-  @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-      scroll-behavior: auto !important;
-    }
+/* Motion safety */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
-@layer components {
-  /* ===================== BOTÕES PILL ===================== */
-  .btn-accent {
-    @apply relative inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-full font-sans font-semibold text-sm tracking-tight text-white transition-all duration-300;
-    background: var(--gradient-accent);
-    box-shadow: 0 4px 20px -2px rgba(151, 71, 255, 0.35);
-  }
-  .btn-accent:hover {
-    transform: translateY(-1.5px) scale(1.01);
-    box-shadow: 0 8px 30px -4px rgba(255, 38, 137, 0.45);
-  }
-  .btn-accent:active {
-    transform: translateY(0) scale(0.99);
-  }
-
-  .btn-glass {
-    @apply inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full font-sans font-medium text-sm tracking-tight text-white/90 bg-white/[0.05] border border-white/[0.1] backdrop-blur-xl transition-all duration-300;
-  }
-  .btn-glass:hover {
-    @apply bg-white/[0.1] text-white border-white/[0.2];
-    transform: translateY(-1px);
-  }
-  .btn-glass:active {
-    transform: translateY(0);
-  }
-
-  /* ===================== GRADIENTES DE TEXTO ===================== */
-  .text-gradient-accent {
-    background: var(--gradient-accent);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  /* ===================== GLASSMORPHISM ===================== */
-  .glass-header {
-    background: rgba(5, 5, 5, 0.75);
-    backdrop-filter: blur(24px) saturate(180%);
-    -webkit-backdrop-filter: blur(24px) saturate(180%);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-  }
-
-  .glass-card {
-    background: rgba(21, 16, 30, 0.6);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-  }
-
-  /* ===================== BADGES E PILLS ===================== */
-  .badge-pill {
-    @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium tracking-tight border backdrop-blur-md;
-  }
-  .badge-pill-special {
-    background: rgba(151, 71, 255, 0.12);
-    color: #B372FF;
-    border-color: rgba(151, 71, 255, 0.25);
-  }
-  .badge-pill-advanced {
-    background: rgba(255, 38, 137, 0.12);
-    color: #FF5CA5;
-    border-color: rgba(255, 38, 137, 0.25);
-  }
-  .badge-pill-intermediate {
-    background: rgba(255, 156, 43, 0.12);
-    color: #FFB55E;
-    border-color: rgba(255, 156, 43, 0.25);
-  }
-  .badge-pill-beginner {
-    background: rgba(52, 211, 153, 0.12);
-    color: #34D399;
-    border-color: rgba(52, 211, 153, 0.25);
-  }
-
-  /* ===================== DIVISÓRIAS DISCRETAS ===================== */
-  .divider-subtle {
-    height: 1px;
-    background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.06) 50%, transparent 100%);
-  }
-
-  /* ===================== CARDS STREAMING (NETFLIX + FITNESS) ===================== */
-  .streaming-card {
-    @apply relative overflow-hidden rounded-2xl bg-ganley-surface-1 border border-white/[0.06] transition-all duration-300;
-    box-shadow: 0 15px 35px -10px rgba(0,0,0,0.8);
-  }
-  .streaming-card:hover {
-    transform: translateY(-5px) scale(1.02);
-    border-color: rgba(151, 71, 255, 0.4);
-    box-shadow: 0 25px 50px -12px rgba(151, 71, 255, 0.25);
-  }
-
-  /* ===================== ILUMINAÇÃO ATMOSFÉRICA ===================== */
-  .ambient-glow {
-    position: absolute;
-    border-radius: 9999px;
-    filter: blur(120px);
-    pointer-events: none;
-    opacity: 0.15;
-  }
+/* ===================== BOTÕES PILL ===================== */
+.btn-accent {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  padding: 0.875rem 1.75rem;
+  border-radius: 9999px;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 0.875rem;
+  letter-spacing: -0.015em;
+  color: #ffffff;
+  transition: all 0.3s ease;
+  background: var(--gradient-accent);
+  box-shadow: 0 4px 20px -2px rgba(151, 71, 255, 0.35);
+}
+.btn-accent:hover {
+  transform: translateY(-1.5px) scale(1.01);
+  box-shadow: 0 8px 30px -4px rgba(255, 38, 137, 0.45);
+}
+.btn-accent:active {
+  transform: translateY(0) scale(0.99);
 }
 
-@layer utilities {
-  .carousel-scroll {
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-  }
-  .carousel-scroll::-webkit-scrollbar {
-    display: none;
-  }
-  .carousel-item {
-    scroll-snap-align: start;
-  }
+.btn-glass {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 9999px;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-weight: 500;
+  font-size: 0.875rem;
+  letter-spacing: -0.015em;
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  transition: all 0.3s ease;
+}
+.btn-glass:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+.btn-glass:active {
+  transform: translateY(0);
+}
+
+/* ===================== GRADIENTES DE TEXTO ===================== */
+.text-gradient-accent {
+  background: var(--gradient-accent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ===================== GLASSMORPHISM ===================== */
+.glass-header {
+  background: rgba(5, 5, 5, 0.75);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.glass-card {
+  background: rgba(21, 16, 30, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* ===================== BADGES E PILLS ===================== */
+.badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  border-width: 1px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.badge-pill-special {
+  background: rgba(151, 71, 255, 0.12);
+  color: #B372FF;
+  border-color: rgba(151, 71, 255, 0.25);
+}
+.badge-pill-advanced {
+  background: rgba(255, 38, 137, 0.12);
+  color: #FF5CA5;
+  border-color: rgba(255, 38, 137, 0.25);
+}
+.badge-pill-intermediate {
+  background: rgba(255, 156, 43, 0.12);
+  color: #FFB55E;
+  border-color: rgba(255, 156, 43, 0.25);
+}
+.badge-pill-beginner {
+  background: rgba(52, 211, 153, 0.12);
+  color: #34D399;
+  border-color: rgba(52, 211, 153, 0.25);
+}
+
+/* ===================== DIVISÓRIAS DISCRETAS ===================== */
+.divider-subtle {
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.06) 50%, transparent 100%);
+}
+
+/* ===================== CARDS STREAMING (NETFLIX + FITNESS) ===================== */
+.streaming-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1rem;
+  background-color: #0C0A12;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.8);
+}
+.streaming-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  border-color: rgba(151, 71, 255, 0.4);
+  box-shadow: 0 25px 50px -12px rgba(151, 71, 255, 0.25);
+}
+
+/* ===================== ILUMINAÇÃO ATMOSFÉRICA ===================== */
+.ambient-glow {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(120px);
+  pointer-events: none;
+  opacity: 0.15;
+}
+
+/* ===================== CAROUSEL UTILITIES ===================== */
+.carousel-scroll {
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.carousel-scroll::-webkit-scrollbar {
+  display: none;
+}
+.carousel-item {
+  scroll-snap-align: start;
 }
